@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jota. | João Vitor, desenvolvedor back-end</title>
+  <meta name="description" content="Sou o João Vitor (jota.), desenvolvedor back-end em Python e FastAPI. Procuro estágio ou vaga júnior.">
+  <meta name="theme-color" content="#000000">
+  <meta property="og:title" content="jota. | João Vitor, desenvolvedor back-end">
+  <meta property="og:description" content="APIs, filas e bancos de dados que continuam certos quando algo dá errado.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23000'/%3E%3Ctext x='6' y='24' font-family='Arial' font-weight='900' font-size='22' fill='%23fff'%3Ej%3C/text%3E%3Crect x='19' y='19' width='6' height='6' fill='%23e10600'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --preto: #000000;
+      --branco: #ffffff;
+      --grafite: #1f1f1f;
+      --cinza: #8c8c8c;
+      --cinza-escuro: #5c5c5c;
+      --vermelho: #e10600;
+      --vermelho-escuro: #b00500;
+
+      --fonte: "Archivo", "Helvetica Neue", Arial, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+
+      --margem: clamp(20px, 5vw, 72px);
+      --largura: 1240px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: var(--fonte);
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      background: var(--preto);
+      color: var(--branco);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    :focus-visible {
+      outline: 3px solid var(--vermelho);
+      outline-offset: 3px;
+    }
+
+    .pular {
+      position: absolute;
+      left: -9999px;
+      top: 8px;
+      background: var(--branco);
+      color: var(--preto);
+      padding: 8px 14px;
+      z-index: 20;
+    }
+    .pular:focus { left: 8px; }
+
+    .faixa {
+      max-width: var(--largura);
+      margin: 0 auto;
+      padding-left: var(--margem);
+      padding-right: var(--margem);
+    }
+
+    .ponto { color: var(--vermelho); }
+
+    /* ---------- Cabeçalho ---------- */
+
+    .topo {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--grafite);
+    }
+
+    .topo .faixa {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      height: 68px;
+    }
+
+    .marca {
+      font-size: 1.45rem;
+      font-weight: 850;
+      font-stretch: 115%;
+      letter-spacing: -0.04em;
+      text-decoration: none;
+    }
+
+    .topo nav ul {
+      display: flex;
+      align-items: center;
+      gap: clamp(16px, 3vw, 32px);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .topo nav a {
+      text-decoration: none;
+      color: var(--cinza);
+      transition: color 0.15s;
+    }
+    .topo nav a:hover { color: var(--branco); }
+
+    .topo nav .nav-contato {
+      color: var(--branco);
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--vermelho);
+    }
+    .topo nav .nav-contato:hover { background: var(--vermelho-escuro); }
+
+    /* ---------- Abertura ---------- */
+
+    .abertura {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .abertura::before {
+      content: "";
+      position: absolute;
+      width: 720px;
+      height: 720px;
+      right: -220px;
+      top: -260px;
+      background: radial-gradient(circle, rgba(225, 6, 0, 0.32), rgba(225, 6, 0, 0) 65%);
+      pointer-events: none;
+    }
+
+    .abertura .faixa {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-areas:
+        "titulo titulo"
+        "texto  registro";
+      column-gap: clamp(32px, 5vw, 80px);
+      row-gap: clamp(32px, 4vw, 56px);
+      align-items: end;
+      padding-top: clamp(56px, 9vw, 120px);
+      padding-bottom: clamp(72px, 10vw, 140px);
+    }
+
+    .abertura-titulo { grid-area: titulo; }
+    .abertura-texto { grid-area: texto; }
+    .registro { grid-area: registro; }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 24px;
+      padding: 6px 14px 6px 12px;
+      border: 1px solid rgba(225, 6, 0, 0.55);
+      border-radius: 999px;
+      background: rgba(225, 6, 0, 0.12);
+      font-size: 0.92rem;
+    }
+
+    .status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--vermelho);
+      animation: pulsa 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulsa {
+      50% { opacity: 0.35; }
+    }
+
+    .nome {
+      margin: 0;
+      font-size: clamp(5rem, 19vw, 15rem);
+      line-height: 0.82;
+      font-weight: 900;
+      font-stretch: 112%;
+      letter-spacing: -0.06em;
+    }
+
+    .resumo {
+      max-width: 36ch;
+      margin: 0;
+      font-size: clamp(1.2rem, 2vw, 1.4rem);
+      line-height: 1.45;
+      color: #dcdcdc;
+    }
+
+    .resumo strong { color: var(--branco); font-weight: 600; }
+
+    .acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      border-radius: 8px;
+      border: 1.5px solid var(--branco);
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .botao-vermelho {
+      background: var(--vermelho);
+      border-color: var(--vermelho);
+      color: var(--branco);
+    }
+    .botao-vermelho:hover { background: var(--vermelho-escuro); border-color: var(--vermelho-escuro); }
+
+    .botao-vazado:hover { background: var(--branco); color: var(--preto); }
+
+    .botao svg { width: 18px; height: 18px; flex: none; }
+
+    /* Registro de requisições: o elemento que dá identidade à página */
+
+    .registro {
+      margin: 0;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      background: #070707;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      overflow: hidden;
+      box-shadow: 0 30px 80px -30px rgba(225, 6, 0, 0.35);
+    }
+
+    .janela-barra {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #111;
+      border-bottom: 1px solid #222;
+      color: var(--cinza-escuro);
+    }
+
+    .janela-barra i {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #333;
+    }
+    .janela-barra i:first-child { background: var(--vermelho); }
+    .janela-barra span { margin-left: 10px; }
+    .janela-barra b { margin-left: auto; font-weight: 400; }
+
+    .registro ol {
+      height: 300px;
+      margin: 0;
+      padding: 8px 0;
+      list-style: none;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      -webkit-mask-image: linear-gradient(to bottom, transparent, #000 64px);
+      mask-image: linear-gradient(to bottom, transparent, #000 64px);
+    }
+
+    .linha {
+      display: grid;
+      grid-template-columns: 4.6em 3.6em minmax(0, 1fr) 2.6em;
+      column-gap: 10px;
+      padding: 3px 16px;
+      white-space: nowrap;
+    }
+
+    .linha .hora { color: var(--cinza-escuro); }
+    .linha .metodo { color: var(--cinza); }
+    .linha .rota { overflow: hidden; text-overflow: ellipsis; }
+    .linha .codigo { text-align: right; font-weight: 600; }
+    .linha .nota {
+      grid-column: 3 / 5;
+      color: var(--cinza-escuro);
+      white-space: normal;
+    }
+    .linha.erro { background: rgba(225, 6, 0, 0.07); }
+    .linha.erro .codigo,
+    .linha.erro .nota { color: #ff3b30; }
+
+    .linha.nova { animation: entra 0.35s ease-out; }
+
+    @keyframes entra {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .registro figcaption {
+      padding: 12px 16px;
+      border-top: 1px solid #222;
+      color: var(--cinza-escuro);
+      font-family: var(--fonte);
+      font-size: 0.85rem;
+    }
+
+    /* ---------- Seções claras ---------- */
+
+    .claro {
+      background: var(--branco);
+      color: var(--preto);
+    }
+
+    .secao {
+      padding-top: clamp(72px, 10vw, 128px);
+      padding-bottom: clamp(72px, 10vw, 128px);
+    }
+
+    .titulo-secao {
+      margin: 0 0 14px;
+      font-size: clamp(2.4rem, 5.4vw, 4rem);
+      line-height: 0.95;
+      font-weight: 850;
+      font-stretch: 115%;
+      letter-spacing: -0.04em;
+    }
+
+    .intro-secao {
+      max-width: 54ch;
+      margin: 0 0 clamp(40px, 6vw, 64px);
+      color: #444;
+    }
+
+    /* ---------- Projetos ---------- */
+
+    .projeto {
+      padding: clamp(40px, 5vw, 64px) 0;
+      border-top: 2px solid var(--preto);
+    }
+
+    .projeto-cabeca {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px 32px;
+      margin-bottom: 28px;
+    }
+
+    .projeto h3 {
+      margin: 0;
+      font-size: clamp(2rem, 4.4vw, 3.2rem);
+      line-height: 1;
+      font-weight: 850;
+      font-stretch: 110%;
+      letter-spacing: -0.035em;
+    }
+
+    .projeto h3 .emoji { font-size: 0.7em; margin-right: 8px; }
+
+    .link-codigo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1.5px solid var(--preto);
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .link-codigo:hover { background: var(--preto); color: var(--branco); }
+    .link-codigo svg { width: 18px; height: 18px; }
+
+    .projeto-corpo {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      gap: clamp(28px, 4vw, 64px);
+      align-items: start;
+    }
+
+    .problema {
+      max-width: 40ch;
+      margin: 0 0 22px;
+      font-size: 1.2rem;
+      line-height: 1.45;
+    }
+
+    .stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 28px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .stack li {
+      padding: 4px 11px;
+      border-radius: 999px;
+      background: #f0f0f0;
+      font-size: 0.85rem;
+    }
+
+    .solucoes {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: item;
+    }
+
+    .solucoes li {
+      position: relative;
+      padding: 14px 0 14px 22px;
+      border-top: 1px solid #e6e6e6;
+    }
+
+    .solucoes li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 23px;
+      width: 8px;
+      height: 8px;
+      background: var(--vermelho);
+    }
+
+    .solucoes strong { display: block; font-weight: 700; }
+    .solucoes span { color: #4a4a4a; }
+
+    /* Prévia de requisição, no estilo de um cliente HTTP */
+
+    .previa {
+      border-radius: 12px;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 1.6;
+      overflow: hidden;
+      box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.55);
+    }
+
+    .previa-pedido {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #151515;
+      border-bottom: 1px solid #262626;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .metodo-tag {
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #262626;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .previa-pedido .url { color: #bdbdbd; overflow: hidden; text-overflow: ellipsis; }
+
+    .previa pre {
+      margin: 0;
+      padding: 14px 16px;
+      overflow-x: auto;
+      color: #bdbdbd;
+    }
+
+    .previa .chave { color: #ffffff; }
+    .previa .texto { color: #a3a3a3; }
+    .previa .comentario { color: #5c5c5c; }
+
+    .previa-resposta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-top: 1px solid #262626;
+      border-bottom: 1px solid #262626;
+      background: #101010;
+      color: var(--cinza);
+    }
+
+    .codigo-ok,
+    .codigo-erro {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .codigo-ok { background: #ffffff; color: #000; }
+    .codigo-erro { background: var(--vermelho); color: #fff; }
+
+    /* ---------- Faculdade ---------- */
+
+    .faculdade {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: clamp(48px, 6vw, 72px);
+    }
+
+    .faculdade h3 {
+      grid-column: 1 / -1;
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 800;
+      font-stretch: 110%;
+      letter-spacing: -0.02em;
+    }
+
+    .mini {
+      padding: 24px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+    }
+
+    .mini h4 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+    }
+
+    .mini p { margin: 0 0 14px; color: #4a4a4a; }
+
+    .mini small {
+      color: var(--vermelho);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* ---------- Sobre ---------- */
+
+    .sobre .faixa {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: clamp(32px, 6vw, 96px);
+      align-items: start;
+    }
+
+    .foto {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      max-width: 380px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #111;
+      border: 1px solid #262626;
+    }
+
+    .foto img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.05);
+    }
+
+    .foto-reserva {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 7rem;
+      font-weight: 900;
+      font-stretch: 115%;
+      letter-spacing: -0.06em;
+      background:
+        radial-gradient(circle at 70% 20%, rgba(225, 6, 0, 0.45), transparent 60%),
+        #0d0d0d;
+    }
+
+    .foto-legenda {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--vermelho);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .sobre p {
+      max-width: 60ch;
+      margin: 0 0 18px;
+      color: #d9d9d9;
+    }
+
+    .sobre h3 {
+      margin: 36px 0 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .fatos {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      margin: 32px 0 8px;
+      background: #262626;
+      border: 1px solid #262626;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .fatos div {
+      padding: 18px;
+      background: var(--preto);
+    }
+
+    .fatos dt { color: var(--cinza); font-size: 0.85rem; }
+    .fatos dd {
+      margin: 4px 0 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      font-stretch: 108%;
+    }
+
+    .lista-simples {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .lista-simples li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--grafite);
+      color: #d9d9d9;
+    }
+
+    /* ---------- Contato (bloco vermelho) ---------- */
+
+    .contato {
+      background: var(--vermelho);
+      color: var(--branco);
+    }
+
+    .contato .titulo-secao { margin-bottom: 18px; }
+
+    .contato p {
+      max-width: 46ch;
+      margin: 0 0 40px;
+      font-size: 1.15rem;
+    }
+
+    .email {
+      display: inline-block;
+      font-size: clamp(1.6rem, 5vw, 3.6rem);
+      font-weight: 800;
+      font-stretch: 110%;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 10px;
+      overflow-wrap: anywhere;
+    }
+    .email:hover { text-decoration-color: var(--preto); }
+
+    .contato .acoes { margin-top: 44px; }
+
+    .contato .botao { border-color: var(--branco); }
+    .contato .botao-preto { background: var(--preto); border-color: var(--preto); }
+    .contato .botao-preto:hover { background: #222; border-color: #222; }
+    .contato .botao-vazado:hover { background: var(--branco); color: var(--vermelho); }
+
+    .rodape {
+      padding: 28px 0;
+      color: var(--cinza-escuro);
+      font-size: 0.9rem;
+    }
+
+    .rodape .faixa {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .rodape p { margin: 0; }
+
+    /* ---------- Responsivo ---------- */
+
+    @media (max-width: 900px) {
+      .abertura .faixa {
+        grid-template-columns: 1fr;
+        grid-template-areas: "titulo" "texto" "registro";
+      }
+
+      .projeto-corpo,
+      .sobre .faixa { grid-template-columns: 1fr; }
+
+      .registro ol { height: 260px; }
+    }
+
+    @media (max-width: 640px) {
+      .topo nav li:not(:last-child) { display: none; }
+      .faculdade { grid-template-columns: 1fr; }
+      .fatos { grid-template-columns: 1fr; }
+      .linha { grid-template-columns: 3.6em minmax(0, 1fr) 2.6em; }
+      .linha .hora { display: none; }
+      .linha .nota { grid-column: 2 / 4; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .linha.nova, .status::before { animation: none; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="topo">
+    <div class="faixa">
+      <a class="marca" href="#">jota<span class="ponto">.</span></a>
+      <nav aria-label="Seções">
+        <ul>
+          <li><a href="#projetos">Projetos</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a class="nav-contato" href="#contato">Fale comigo</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="abertura" aria-labelledby="nome">
+      <div class="faixa">
+        <div class="abertura-titulo">
+          <p class="status">Procurando estágio ou vaga júnior</p>
+          <h1 class="nome" id="nome">jota<span class="ponto">.</span></h1>
+        </div>
+
+        <div class="abertura-texto">
+          <p class="resumo">
+            Oi! Sou o <strong>João Vitor</strong>, tenho <span class="idade">19</span> anos e programo
+            back-end em Python. Gosto de construir APIs, filas e bancos de dados que continuam certos
+            quando a internet cai, o cliente clica duas vezes ou outro serviço sai do ar.
+          </p>
+          <div class="acoes">
+            <a class="botao botao-vermelho" href="#projetos">Ver meus projetos</a>
+            <a class="botao botao-vazado" href="https://github.com/jota-vitor">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.7 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+              Meu GitHub
+            </a>
+          </div>
+        </div>
+
+        <figure class="registro" aria-label="Exemplo de registro de requisições dos meus projetos">
+          <div class="janela-barra" aria-hidden="true">
+            <i></i><i></i><i></i>
+            <span>uvicorn app.main:app</span>
+            <b id="contador">0 req</b>
+          </div>
+          <ol id="linhas" aria-live="off"></ol>
+          <figcaption>Requisições simuladas dos meus três projetos, incluindo as que dão errado de propósito.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="claro" id="projetos" aria-labelledby="titulo-projetos">
+      <div class="faixa secao">
+        <h2 class="titulo-secao" id="titulo-projetos">Projetos</h2>
+        <p class="intro-secao">
+          Escolhi problemas que acontecem em sistemas de verdade e fui atrás de resolver direito.
+          Todos têm testes automatizados, Docker, CI no GitHub Actions e um README contando por que
+          tomei cada decisão.
+        </p>
+
+        <article class="projeto">
+          <div class="projeto-cabeca">
+            <h3><span class="emoji" aria-hidden="true">💸</span>ledger-api</h3>
+            <a class="link-codigo" href="https://github.com/jota-vitor/ledger-api">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.7 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+              Ver o código
+            </a>
+          </div>
+          <div class="projeto-corpo">
+            <div>
+              <p class="problema">Uma carteira digital que não cria nem perde centavos, mesmo com centenas de transferências ao mesmo tempo.</p>
+              <ul class="stack" aria-label="Tecnologias">
+                <li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>SQLAlchemy</li><li>Docker</li>
+              </ul>
+              <ul class="solucoes">
+                <li><strong>Mandou duas vezes? Cobra uma.</strong><span>Com a Idempotency-Key, reenviar a mesma transferência devolve o resultado original.</span></li>
+                <li><strong>Duas operações na mesma conta</strong><span>Travo as contas sempre na mesma ordem, então não sobra saldo errado nem deadlock.</span></li>
+                <li><strong>Saldo que dá para provar</strong><span>Partidas dobradas: cada transferência gera um débito e um crédito no extrato.</span></li>
+              </ul>
+            </div>
+            <div class="previa" aria-label="Exemplo de resposta da API">
+              <div class="previa-pedido"><span class="metodo-tag">POST</span><span class="url">/transfers</span></div>
+              <pre><span class="comentario"># Idempotency-Key: 6f1c2a9e-3b7d…</span>
+{
+  <span class="chave">"from_account_id"</span>: 1,
+  <span class="chave">"to_account_id"</span>: 2,
+  <span class="chave">"amount_cents"</span>: 25000
+}</pre>
+              <div class="previa-resposta"><span class="codigo-erro">422</span> Unprocessable Entity</div>
+              <pre>{
+  <span class="chave">"detail"</span>: <span class="texto">"Saldo insuficiente"</span>,
+  <span class="chave">"code"</span>: <span class="texto">"insufficient_funds"</span>
+}</pre>
+            </div>
+          </div>
+        </article>
+
+        <article class="projeto">
+          <div class="projeto-cabeca">
+            <h3><span class="emoji" aria-hidden="true">📨</span>webhook-relay</h3>
+            <a class="link-codigo" href="https://github.com/jota-vitor/webhook-relay">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.7 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+              Ver o código
+            </a>
+          </div>
+          <div class="projeto-corpo">
+            <div>
+              <p class="problema">Recebe avisos como "o pagamento caiu" e garante que cheguem ao destino, mesmo que ele esteja fora do ar.</p>
+              <ul class="stack" aria-label="Tecnologias">
+                <li>Python</li><li>FastAPI</li><li>Redis</li><li>PostgreSQL</li><li>Workers</li>
+              </ul>
+              <ul class="solucoes">
+                <li><strong>Aviso falso não passa</strong><span>Assinatura HMAC com horário, que barra também quem tenta reenviar uma requisição antiga.</span></li>
+                <li><strong>Destino caiu? Tenta de novo.</strong><span>Workers com esperas cada vez maiores. Depois de 8 falhas, a entrega vai para a fila morta.</span></li>
+                <li><strong>Nada chega duplicado</strong><span>Eventos repetidos são reconhecidos pelo ID e ignorados.</span></li>
+              </ul>
+            </div>
+            <div class="previa" aria-label="Exemplo de resposta da API">
+              <div class="previa-pedido"><span class="metodo-tag">GET</span><span class="url">/events/9b2e41c7…</span></div>
+              <div class="previa-resposta"><span class="codigo-ok">200</span> OK</div>
+              <pre>{
+  <span class="chave">"event_type"</span>: <span class="texto">"payment.paid"</span>,
+  <span class="chave">"deliveries"</span>: [
+    {
+      <span class="chave">"destination_id"</span>: 1,
+      <span class="chave">"status"</span>: <span class="texto">"succeeded"</span>,
+      <span class="chave">"attempts"</span>: 3,
+      <span class="chave">"last_error"</span>: null
+    },
+    {
+      <span class="chave">"destination_id"</span>: 2,
+      <span class="chave">"status"</span>: <span class="texto">"pending"</span>,
+      <span class="chave">"attempts"</span>: 2,
+      <span class="chave">"last_error"</span>: <span class="texto">"HTTP 503"</span>
+    }
+  ]
+}</pre>
+            </div>
+          </div>
+        </article>
+
+        <article class="projeto">
+          <div class="projeto-cabeca">
+            <h3><span class="emoji" aria-hidden="true">✅</span>taskflow-api</h3>
+            <a class="link-codigo" href="https://github.com/jota-vitor/taskflow-api">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.7 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+              Ver o código
+            </a>
+          </div>
+          <div class="projeto-corpo">
+            <div>
+              <p class="problema">API de projetos e tarefas com login, o tipo de back-end que existe por trás de um Trello.</p>
+              <ul class="stack" aria-label="Tecnologias">
+                <li>Python</li><li>FastAPI</li><li>JWT</li><li>PostgreSQL</li><li>pytest</li>
+              </ul>
+              <ul class="solucoes">
+                <li><strong>Cada um vê só o que é seu</strong><span>Login com JWT. O projeto de outra pessoa responde 404, sem confirmar que ele existe.</span></li>
+                <li><strong>Listas que crescem</strong><span>Paginação e filtros por status, prioridade, texto e tarefas atrasadas.</span></li>
+                <li><strong>Resumo calculado no banco</strong><span>A contagem por status sai de um GROUP BY, sem carregar tudo na memória.</span></li>
+              </ul>
+            </div>
+            <div class="previa" aria-label="Exemplo de resposta da API">
+              <div class="previa-pedido"><span class="metodo-tag">GET</span><span class="url">/projects/7/tasks/summary</span></div>
+              <div class="previa-resposta"><span class="codigo-ok">200</span> OK</div>
+              <pre>{
+  <span class="chave">"todo"</span>: 4,
+  <span class="chave">"doing"</span>: 2,
+  <span class="chave">"done"</span>: 11,
+  <span class="chave">"overdue"</span>: 1
+}</pre>
+              <div class="previa-pedido"><span class="metodo-tag">GET</span><span class="url">/projects/9</span></div>
+              <div class="previa-resposta"><span class="codigo-erro">404</span> Projeto não encontrado</div>
+            </div>
+          </div>
+        </article>
+
+        <div class="faculdade">
+          <h3>Da faculdade</h3>
+          <article class="mini">
+            <h4>ReCircuito</h4>
+            <p>Site sobre descarte correto de lixo eletrônico, com dicas, filtros, formulário validado e atenção à acessibilidade.</p>
+            <small>HTML, CSS e JavaScript</small>
+          </article>
+          <article class="mini">
+            <h4>Sistema acadêmico em C</h4>
+            <p>Cadastro de até 100 alunos com vetor de structs, lançamento de notas, relatório e média da turma.</p>
+            <small>Linguagem C</small>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="sobre" id="sobre" aria-labelledby="titulo-sobre">
+      <div class="faixa secao">
+        <div class="foto">
+          <!-- Para usar sua foto: salve como foto.jpg nesta pasta e apague a div .foto-reserva -->
+          <img src="foto.jpg" alt="Foto do João Vitor" onerror="this.remove()">
+          <div class="foto-reserva" aria-hidden="true"><span>j<span class="ponto">.</span></span></div>
+          <span class="foto-legenda">São Paulo, SP</span>
+        </div>
+
+        <div>
+          <h2 class="titulo-secao" id="titulo-sobre">Prazer, João Vitor<span class="ponto">.</span></h2>
+          <p>
+            Mas pode me chamar de jota. Estou na faculdade estudando tecnologia e escolhi o back-end
+            porque gosto da parte que ninguém vê, mas que todo mundo percebe quando dá errado.
+          </p>
+          <p>
+            Sou proativo e aprendo construindo. Quando um assunto me interessa, leio a documentação,
+            monto um projeto, escrevo os testes e só considero pronto quando consigo explicar cada decisão.
+            Agora quero colocar isso em prática num time de verdade.
+          </p>
+
+          <dl class="fatos">
+            <div><dt>Idade</dt><dd><span class="idade">19</span> anos</dd></div>
+            <div><dt>Foco</dt><dd>Back-end</dd></div>
+            <div><dt>Procurando</dt><dd>Estágio ou júnior</dd></div>
+          </dl>
+
+          <h3>Ferramentas que uso</h3>
+          <ul class="lista-simples">
+            <li>Python, FastAPI, SQLAlchemy e Pydantic</li>
+            <li>PostgreSQL e Redis</li>
+            <li>Docker, Git, GitHub Actions e Linux</li>
+            <li>C, HTML, CSS e JavaScript, da faculdade</li>
+          </ul>
+
+          <h3>Estudando agora</h3>
+          <ul class="lista-simples">
+            <li>Migrações com Alembic e deploy sem derrubar o sistema</li>
+            <li>Observabilidade: logs estruturados, métricas e tracing</li>
+            <li>Mensageria com RabbitMQ e Kafka</li>
+            <li>Fundamentos de AWS</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="contato" id="contato" aria-labelledby="titulo-contato">
+      <div class="faixa secao">
+        <h2 class="titulo-secao" id="titulo-contato">Bora conversar?</h2>
+        <p>Tem uma vaga, um projeto ou quer trocar ideia sobre back-end? Me chama. Eu respondo rápido.</p>
+        <a class="email" href="mailto:joaotatanjo@gmail.com">joaotatanjo@gmail.com</a>
+        <div class="acoes">
+          <a class="botao botao-preto" href="https://wa.me/5511961696300">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.1 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3Z"/></svg>
+            WhatsApp (11) 96169-6300
+          </a>
+          <a class="botao botao-vazado" href="https://www.linkedin.com/in/SEU-LINKEDIN">LinkedIn</a>
+          <a class="botao botao-vazado" href="https://github.com/jota-vitor">GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="faixa">
+      <p>&copy; 2026 João Vitor Tatanjo de Araujo</p>
+      <p>Feito à mão com HTML, CSS e um pouco de JavaScript.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // Idade calculada a partir da data de nascimento, para nunca ficar desatualizada
+      const nascimento = new Date(2007, 9, 16); // mês começa em 0: 9 = outubro
+      const hoje = new Date();
+      let idade = hoje.getFullYear() - nascimento.getFullYear();
+      const aindaNaoFezAniversario =
+        hoje.getMonth() < nascimento.getMonth() ||
+        (hoje.getMonth() === nascimento.getMonth() && hoje.getDate() < nascimento.getDate());
+      if (aindaNaoFezAniversario) idade--;
+      document.querySelectorAll(".idade").forEach(function (el) { el.textContent = idade; });
+
+      // Cada item é uma requisição de um dos três projetos. "erro" pinta a linha de vermelho.
+      const roteiro = [
+        { m: "POST", r: "/auth/login", c: 200 },
+        { m: "GET", r: "/projects?page=1", c: 200 },
+        { m: "POST", r: "/transfers", c: 201, n: "R$ 25,90 de #1 para #2" },
+        { m: "POST", r: "/transfers", c: 200, n: "mesma Idempotency-Key: devolvida a original" },
+        { m: "POST", r: "/transfers", c: 422, n: "insufficient_funds", erro: true },
+        { m: "POST", r: "/webhooks/pagamentos", c: 202, n: "evento salvo e enfileirado" },
+        { m: "→", r: "entrega #81 /hook", c: 503, n: "nova tentativa em 4s", erro: true },
+        { m: "→", r: "entrega #81 /hook", c: 200, n: "entregue na 2ª tentativa" },
+        { m: "POST", r: "/webhooks/pagamentos", c: 401, n: "assinatura fora da janela de tempo", erro: true },
+        { m: "GET", r: "/projects/7/tasks/summary", c: 200 },
+        { m: "GET", r: "/projects/9", c: 404, n: "projeto de outro usuário", erro: true },
+        { m: "GET", r: "/accounts/1/reconciliation", c: 200, n: "saldo confere com o extrato" }
+      ];
+
+      const lista = document.getElementById("linhas");
+      const contador = document.getElementById("contador");
+      const reduzido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const maxLinhas = 14;
+      let total = 0;
+      let indice = 0;
+
+      function hora() {
+        return new Date().toTimeString().slice(0, 8);
+      }
+
+      function criarLinha(item, animar) {
+        const li = document.createElement("li");
+        li.className = "linha" + (item.erro ? " erro" : "") + (animar ? " nova" : "");
+
+        [["hora", hora()], ["metodo", item.m], ["rota", item.r], ["codigo", item.c]].forEach(function (par) {
+          const span = document.createElement("span");
+          span.className = par[0];
+          span.textContent = par[1];
+          li.appendChild(span);
+        });
+
+        if (item.n) {
+          const nota = document.createElement("span");
+          nota.className = "nota";
+          nota.textContent = item.n;
+          li.appendChild(nota);
+        }
+        return li;
+      }
+
+      function adicionar(animar) {
+        lista.appendChild(criarLinha(roteiro[indice], animar));
+        indice = (indice + 1) % roteiro.length;
+        total++;
+        contador.textContent = total + " req";
+
+        while (lista.children.length > maxLinhas) {
+          lista.removeChild(lista.firstChild);
+        }
+      }
+
+      for (let i = 0; i < 7; i++) adicionar(false);
+
+      if (!reduzido) {
+        setInterval(function () { adicionar(true); }, 1400);
+      }
+    })();
+  </script>
+</body>
+</html>
